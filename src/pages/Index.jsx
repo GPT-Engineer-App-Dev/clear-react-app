@@ -1,7 +1,11 @@
-import { Box, Container, Flex, Text, VStack, Link, Button } from "@chakra-ui/react";
+import { Box, Container, Flex, Text, VStack, Link, Button, List, ListItem } from "@chakra-ui/react";
 import { useSupabaseAuth } from "../integrations/supabase/auth.jsx";
 
+import { useEvents } from "../integrations/supabase/index.js"; // Import the useEvents hook
+
 const Index = () => {
+  const { session, logout } = useSupabaseAuth();
+  const { data: events, error } = useEvents(); // Fetch events using the useEvents hook
   const { session, logout } = useSupabaseAuth();
 
   return (
@@ -30,6 +34,21 @@ const Index = () => {
         <VStack spacing={4}>
           <Text fontSize="2xl">Welcome to MyApp</Text>
           <Text>This is a basic structure of a React app with Chakra UI.</Text>
+        {session && (
+            <>
+              <Text fontSize="xl">Events</Text>
+              {error && <Text color="red.500">{error.message}</Text>}
+              <List spacing={3}>
+                {events?.map(event => (
+                  <ListItem key={event.id}>
+                    <Text fontWeight="bold">{event.name}</Text>
+                    <Text>{event.description}</Text>
+                    <Text>{new Date(event.date).toLocaleDateString()}</Text>
+                  </ListItem>
+                ))}
+              </List>
+            </>
+          )}
         </VStack>
       </Container>
 
