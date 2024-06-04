@@ -6,7 +6,6 @@ import { useEvents } from "../integrations/supabase/index.js"; // Import the use
 const Index = () => {
   const { session, logout } = useSupabaseAuth();
   const { data: events, error } = useEvents(); // Fetch events using the useEvents hook
-  const { session, logout } = useSupabaseAuth();
 
   return (
     <Box>
